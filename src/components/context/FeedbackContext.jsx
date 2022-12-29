@@ -17,7 +17,7 @@ export const FeedbackProvider = ({ children }) => {
 
     // fetch feedback
     const fetchFeedback = async () => {
-        const responce = await fetch(`http://localhost:5000/feedback?_sort=id&_order=desc`)
+        const responce = await fetch(`/feedback?_sort=id&_order=desc`)
         const data = await responce.json()
         setFeedback(data)
         setIsLoding(false)
@@ -30,10 +30,16 @@ export const FeedbackProvider = ({ children }) => {
         }
     }
     //add feedback
-    const addFeedback = (newFeedback) => {
-        //console.log(newFeedback)
-        newFeedback.id = uuidv4()
-        setFeedback( [newFeedback, ...feedback] )
+    const addFeedback = async (newFeedback) => {
+        const responce = await fetch("/feedback", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newFeedback)
+        })
+        const data = await responce.json()
+        setFeedback( [data, ...feedback] )
     }
     //edit to updated file
     const editFeedback = (item) => {
